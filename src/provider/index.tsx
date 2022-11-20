@@ -1,8 +1,6 @@
 import { FC } from 'react';
 
-import { queryClient } from 'api';
 import { BaseStyled } from 'theme/BaseStyled';
-import { QueryClientProvider } from 'react-query';
 
 interface Props {
   children: React.ReactNode;
@@ -11,9 +9,7 @@ interface Props {
 export const AppProvider: FC<Props> = ({ children }) => {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <BaseStyled>{children}</BaseStyled>
-      </QueryClientProvider>
+      <BaseStyled>{children}</BaseStyled>
     </>
   );
 };

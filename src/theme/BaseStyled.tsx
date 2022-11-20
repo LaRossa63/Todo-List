@@ -6,6 +6,12 @@ interface Props {
 }
 
 const ResetStyled = createGlobalStyle`
+
+  body {
+    background-color: #F5F5F5;
+
+    font-family: Arial, Helvetica, sans-serif;
+  }
   
  * {
     padding: 0px;
