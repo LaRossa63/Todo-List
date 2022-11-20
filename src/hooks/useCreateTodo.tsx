@@ -9,6 +9,7 @@ export const useCreateTodo = () => {
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [file, setFile] = useState('');
+  const [bytesFile, setBytesFile] = useState<FileList>();
 
   const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,12 +19,24 @@ export const useCreateTodo = () => {
       title,
       description,
       date,
-      file,
       completed: false,
       overdue: false,
     };
 
     TodoService.addTodo(newTodo);
+
+    if (file) {
+      TodoService.addFile(newTodo.id, bytesFile);
+    }
+
+    clearInput();
+  };
+
+  const clearInput = () => {
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setFile('');
   };
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +52,12 @@ export const useCreateTodo = () => {
   };
 
   const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) {
+      return;
+    }
+
+    setBytesFile(event.target.files[0] as any);
+
     setFile(event.target.value);
   };
 

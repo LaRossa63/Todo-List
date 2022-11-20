@@ -3,7 +3,6 @@ export interface TodoDTO {
   title: string;
   description: string;
   date: string;
-  file: string;
 
   completed: boolean;
   overdue: boolean;
@@ -14,7 +13,6 @@ export interface ResponseTodoApi {
   title: string;
   description: string;
   date: string;
-  file: string;
 
   completed: boolean;
   overdue: boolean;

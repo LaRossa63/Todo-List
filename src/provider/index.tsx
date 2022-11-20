@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { UpdateTodoContext } from 'store/Context';
+import { useUpdateTodo } from 'hooks';
 import { BaseStyled } from 'theme/BaseStyled';
 
 interface Props {
@@ -9,7 +11,9 @@ interface Props {
 export const AppProvider: FC<Props> = ({ children }) => {
   return (
     <>
-      <BaseStyled>{children}</BaseStyled>
+      <UpdateTodoContext.Provider value={useUpdateTodo()}>
+        <BaseStyled>{children}</BaseStyled>
+      </UpdateTodoContext.Provider>
     </>
   );
 };

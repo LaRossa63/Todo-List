@@ -1,26 +1,39 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { DeleteIcon, DownloadIcon, UpdateIcon } from 'images';
 import { ResponseTodoApi } from 'types/types';
-import { useHandleTodo } from 'hooks';
 import { UpdateTodo } from 'components';
+import { useUpdateTodoContext } from 'store/Context';
+import { useHandleTodo } from 'hooks';
 
 interface Props {
   element: ResponseTodoApi;
 }
 
-const Item = styled.li`
+const Item = styled.li<{ overdue: boolean }>`
   width: 100%;
   height: fit-content;
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   padding: 10px 20px;
 
   background-color: #fff;
   border-radius: 16px;
+
+  ${(props) =>
+    props.overdue === true &&
+    css`
+      background-color: rgb(0, 0, 0, 0.4);
+    `}
+`;
+
+const Checkbox = styled.input`
+  width: 25px;
+  height: 25px;
 `;
 
 const ContainerText = styled.div`
@@ -65,12 +78,25 @@ const ContainerControls = styled.div`
 `;
 
 export const ListItem: FC<Props> = ({ element }) => {
-  const { handleOpenModal, getCurrentStatus, handleClickDelete, isOpenModal } =
-    useHandleTodo();
+  const {
+    getCurrentStatus,
+    handleClickDelete,
+    handleChangeCompleted,
+    handleClickDownloadFile,
+  } = useHandleTodo();
+  const { handleOpenModal, isOpenModal } = useUpdateTodoContext();
 
   return (
     <>
-      <Item key={element.id}>
+      <Item overdue={element.overdue}>
+        <Checkbox
+          type="checkbox"
+          defaultChecked={element.completed}
+          onChange={(event) =>
+            handleChangeCompleted(element.id, event.target.checked)
+          }
+        />
+
         <ContainerText>
           <Title>{element.title}</Title>
           <Description>{element.description}</Description>
@@ -85,8 +111,8 @@ export const ListItem: FC<Props> = ({ element }) => {
         </ContainerStatus>
 
         <ContainerControls>
-          <DownloadIcon />
-          <UpdateIcon onClick={handleOpenModal} />
+          <DownloadIcon onClick={() => handleClickDownloadFile(element.id)} />
+          <UpdateIcon onClick={() => handleOpenModal(element)} />
           <DeleteIcon onClick={() => handleClickDelete(element.id)} />
         </ContainerControls>
 

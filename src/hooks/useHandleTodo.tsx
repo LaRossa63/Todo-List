@@ -1,40 +1,43 @@
-import { TodoService } from 'api';
-import React, { useState } from 'react';
+import React from 'react';
+
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+
+import { storage, TodoService } from 'api';
 
 export const useHandleTodo = () => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
-    // event.preventDefaults();
-
-    setIsOpenModal(false);
+  const handleChangeCompleted = (id: string, completed: boolean) => {
+    TodoService.updateTodo({ id, completed });
   };
 
-  const handleOpenModal = () => {
-    setIsOpenModal(true);
-  };
+  const handleChangeOverdue = () => {};
 
   const handleClickDelete = (id: string) => {
     TodoService.deleteTodo(id);
   };
 
-  const getCurrentStatus = (completed: boolean, overdue: boolean) => {
-    if (completed) {
-      return 'выполнено';
-    }
+  const handleClickDownloadFile = async (id: string) => {
+    const fileUrl = await getDownloadURL(ref(storage, id));
 
+    await fetch(fileUrl);
+  };
+
+  const getCurrentStatus = (completed: boolean, overdue: boolean) => {
     if (overdue) {
       return 'просрочен';
+    }
+
+    if (completed) {
+      return 'выполнено';
     }
 
     return 'выполняется';
   };
 
   return {
-    handleSubmitForm,
-    handleOpenModal,
     handleClickDelete,
     getCurrentStatus,
-    isOpenModal,
+    handleChangeCompleted,
+    handleClickDownloadFile,
+    handleChangeOverdue,
   };
 };
