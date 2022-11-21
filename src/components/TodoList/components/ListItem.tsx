@@ -111,9 +111,7 @@ export const ListItem: FC<Props> = ({ element }) => {
         </ContainerStatus>
 
         <ContainerControls>
-          <DownloadIcon
-            onClick={(event) => handleClickDownloadFile(element.id)}
-          />
+          <DownloadIcon onClick={() => handleClickDownloadFile(element.id)} />
           <UpdateIcon onClick={() => handleOpenModal(element)} />
           <DeleteIcon onClick={() => handleClickDelete(element.id)} />
         </ContainerControls>
