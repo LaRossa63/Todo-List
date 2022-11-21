@@ -38,7 +38,7 @@ export const TodoList = () => {
       const currentUnixTime = dayjs(DayJs.format('YYYY-MM-DD')).unix();
       const oldUnixTime = dayjs(element.date).unix();
 
-      const betweenUnixTime = currentUnixTime - oldUnixTime <= 0;
+      const betweenUnixTime = currentUnixTime - oldUnixTime >= 0;
 
       TodoService.updateTodo({ id: element.id, overdue: betweenUnixTime });
     });

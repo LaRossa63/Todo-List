@@ -1,12 +1,10 @@
-import {
-  uploadBytes,
-  getDownloadURL,
-  ref as refStorage,
-} from 'firebase/storage';
+import { uploadBytes, ref as refStorage } from 'firebase/storage';
 import { ref, remove, set, update } from 'firebase/database';
 
 import { TodoDTO } from 'types/types';
 import { bd, storage } from './config';
+
+type UpdateTodo = Pick<TodoDTO, 'id'> & Partial<TodoDTO>;
 
 export const TodoService = {
   addTodo(body: TodoDTO) {
@@ -17,13 +15,11 @@ export const TodoService = {
     remove(ref(bd, id));
   },
 
-  updateTodo({ ...body }: any) {
+  updateTodo({ ...body }: UpdateTodo) {
     update(ref(bd, body.id), { ...body });
   },
 
   addFile(id: string, file: any) {
-    // const fileExtension = file.name.split('.').reverse()[0];
-
     const fileRef = refStorage(storage, id);
 
     uploadBytes(fileRef, file);

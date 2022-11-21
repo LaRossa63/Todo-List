@@ -1,7 +1,5 @@
 import React from 'react';
-
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-
+import { ref, getDownloadURL } from 'firebase/storage';
 import { storage, TodoService } from 'api';
 
 export const useHandleTodo = () => {
@@ -17,8 +15,13 @@ export const useHandleTodo = () => {
 
   const handleClickDownloadFile = async (id: string) => {
     const fileUrl = await getDownloadURL(ref(storage, id));
+    console.log(fileUrl);
 
-    await fetch(fileUrl);
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getCurrentStatus = (completed: boolean, overdue: boolean) => {
